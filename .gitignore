@@ -565,3 +565,5 @@ MigrationBackup/
 .ionide/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,macos,windows,python,ansible
+
+/src/inventory.yaml

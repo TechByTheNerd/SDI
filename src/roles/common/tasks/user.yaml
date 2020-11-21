@@ -1,0 +1,27 @@
+- name: User - Add the user 'operations' with a bash shell, appending the group 'sudo' to the user's groups
+  user:
+    name: operations
+    password: "{{ password }}"
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+
+- name: User - create ".ssh" folder
+  file:
+    path: /home/operations/.ssh
+    state: directory
+    owner: operations
+    group: operations    
+    mode: "0700"
+
+- name: User - Copy a "authorized_keys" file on the remote machine.
+  copy:
+    src: /root/.ssh/authorized_keys
+    dest: /home/operations/.ssh/authorized_keys
+    remote_src: yes
+    owner: operations
+    group: operations
+    mode: '0600'
+
+- name: User - Force user to reset password upon first logon
+  command: chage -d 0 operations

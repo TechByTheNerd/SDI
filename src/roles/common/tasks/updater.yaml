@@ -1,0 +1,26 @@
+- name: Install eye candy
+  apt: name={{ item }} update_cache=yes state=latest
+  loop: [ 'figlet', 'neofetch'  ]
+
+- name: Updater - interactive
+  template:
+    src: "files/update.sh"
+    dest: "/root/update.sh"
+
+- name: Updater - Changing perm of "/root/update.sh", adding "+x"
+  file: dest=/root/update.sh mode=a+x
+
+- name: Updater - non-interactive
+  template:
+    src: "files/update-batch.sh"
+    dest: "/root/update-batch.sh"
+
+- name: Updater - Changing perm of "/root/update-batch.sh", adding "+x"
+  file: dest=/root/update-batch.sh mode=a+x
+
+- name: Updater - Set cron job to run update once per day."
+  cron:
+    name: "check dirs"
+    minute: "0"
+    hour: "2"
+    job: "/root/update-batch.sh > /root/update-batch_lastrun.log 2>&1"

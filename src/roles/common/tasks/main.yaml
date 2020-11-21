@@ -1,0 +1,41 @@
+
+- name: Install prerequisites
+  apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
+  loop: [ 'aptitude' ]
+
+# fail2ban
+
+- name: fail2ban
+  include_tasks: fail2ban.yaml
+
+# Setup sudo user
+
+- name: Set up sudo/operations user
+  include_tasks: user.yaml
+
+# SSHD Configuration
+
+- name: Configure SSH
+  include_tasks: ssh.yaml
+
+# UFW
+
+- name: Configure UFW
+  include_tasks: ufw.yaml
+
+# Updater
+
+- name: Configure Updater
+  include_tasks: updater.yaml
+
+# One-time update
+
+- name: Perform one-time update
+  include_tasks: update1time.yaml
+
+# Reboot
+# - name: Unconditionally reboot the machine with all defaults
+#   reboot:
+
+- name: Test reboot
+  shell: reboot +10 &

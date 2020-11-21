@@ -1,0 +1,13 @@
+- name: fail2ban - Install fail2ban
+  apt: name={{ item }} update_cache=yes state=latest
+  loop: [ 'fail2ban'  ]
+
+- name: fail2ban - Configure fail2ban (SSHD jail-only)
+  template:
+    src: "files/jail.local"
+    dest: "/etc/fail2ban/jail.local"
+
+- name: fail2ban - Start service
+  service:
+    name: fail2ban
+    state: started

@@ -1,0 +1,73 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yaml
+
+  tasks:
+    - name: Install prerequisites
+      apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
+      loop: [ 'aptitude' ]
+
+    - name: Install eye candy
+      apt: name={{ item }} update_cache=yes state=latest
+      loop: [ 'figlet', 'neofetch'  ]
+
+# fail2ban
+
+    - name: Install fail2ban
+      apt: name={{ item }} update_cache=yes state=latest
+      loop: [ 'fail2ban'  ]
+
+    - name: Configure fail2ban (SSHD jail-only)
+      template:
+        src: "files/jail.local"
+        dest: "/etc/fail2ban/jail.local"
+
+# SSHD Configuration
+
+    - name: SSH - Disable password authentication for root
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin prohibit-password'
+
+    - name: SSH - Set new SSH port
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^#?Port'
+        line: 'Port 40022'
+
+    - name: SSH - Set banner
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^#?Banner'
+        line: 'Banner /etc/issue.net'
+
+# UFW
+    - name: UFW - Deny all other incoming traffic by default
+      ufw:
+        state: enabled
+        policy: deny
+        direction: incoming
+
+    - name: "UFW - Allow HTTP on port 80"
+      ufw:
+        rule: allow
+        port: "80"
+        proto: tcp
+
+    - name: "UFW - Allow HTTP on port 443"
+      ufw:
+        rule: allow
+        port: "443"
+        proto: tcp
+
+    - name: "UFW - Allow HTTP on port 40022"
+      ufw:
+        rule: allow
+        port: "40022"
+        proto: tcp
