@@ -38,4 +38,4 @@
 #   reboot:
 
 - name: Test reboot
-  shell: reboot +10 &
+  shell: nohup sudo -b bash -c 'sleep 5; reboot' &>/dev/null;
