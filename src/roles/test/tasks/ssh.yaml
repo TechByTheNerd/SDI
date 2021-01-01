@@ -1,0 +1,25 @@
+- name: SSH - Disable password authentication for root
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin no'
+
+- name: SSH - Set new SSH port
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^#?Port'
+    line: 'Port 40022'
+
+- name: SSH - Set banner
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^#?Banner'
+    line: 'Banner /etc/issue.net'
+
+- name: SSH - set /etc/issue.net
+  template:
+    src: "files/issue.net"
+    dest: "/etc/issue.net"

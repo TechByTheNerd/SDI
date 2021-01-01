@@ -1,0 +1,11 @@
+- name: UFW - Deny all other incoming traffic by default
+  ufw:
+    state: enabled
+    policy: deny
+    direction: incoming
+
+- name: UFW - Allow HTTP on port 40022
+  ufw:
+    rule: allow
+    port: "40022"
+    proto: tcp

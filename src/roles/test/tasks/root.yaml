@@ -1,0 +1,7 @@
+- name: Copy .bashrc (root-level)
+  template:
+    src: "files/bashrc-root"
+    dest: "/root/.bashrc"
+    owner: root
+    group: root    
+    mode: "0644"
