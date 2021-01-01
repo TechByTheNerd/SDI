@@ -2,6 +2,6 @@
   template:
     src: "files/bashrc-root"
     dest: "/root/.bashrc"
-    owner: operations
-    group: operations    
+    owner: root
+    group: root    
     mode: "0644"
