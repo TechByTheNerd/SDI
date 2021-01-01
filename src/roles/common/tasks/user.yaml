@@ -23,5 +23,13 @@
     group: operations
     mode: '0600'
 
+- name: Copy .bashrc (user-level)
+  template:
+    src: "files/bashrc-user"
+    dest: "/home/operations/.bashrc"
+    owner: operations
+    group: operations    
+    mode: "0644"
+
 - name: User - Force user to reset password upon first logon
   command: chage -d 0 operations
